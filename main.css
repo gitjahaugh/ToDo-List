@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.list {
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+h1 {
+    font-size: 28px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: cornflowerblue;
+    color: white;
+    border-radius: 10px 10px 0 0;
+    padding-left: 10px;
+}
+
+table {
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+td {
+    justify-content: space-between;
+}
+
+h2 {
+    font-size: 18px;
+    color: salmon;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+

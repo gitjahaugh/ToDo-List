@@ -1,0 +1,46 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.top {
+    border: 2px solid black;
+    grid-template-columns: 80% 20%;;
+}
+
+header {
+    background-color: black;
+    color: cornflowerblue;
+    font-size: 24px;
+    font-family: monospace;
+}
+
+.bold {
+    font-weight: bold;
+    color: cornflowerblue;
+}
+
+.clear {
+    grid-column-start: 2;
+    grid-column-end: 3;;
+}
+
+.add_form {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    column-gap: 5px;
+    margin-top: 10px;
+}
+
+.add_form h2 {
+    font-size: 20px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    color: salmon;
+}

@@ -1,12 +1,14 @@
-<?php
-    // Define variables
-    $newtitle = filter_input(INPUT_POST, 'newtitle', FILTER_SANITIZE_STRING);
-    $newdescription = filter_input(INPUT_POST, 'newdescription', FILTER_SANITIZE_STRING);
+<?php 
+require_once('database.php');
 
-    $title = filter_input(INPUT_GET, 'title', FILTER_SANITIZE_STRING);
-    $description = filter_input(INPUT_GET, 'description', FILTER_SANITIZE_STRING);
-
-
+// Get all tasks
+$query =  'SELECT * 
+            FROM todoitems
+            ORDER BY ItemNum';
+$statement = $db->prepare($query);
+$statement->execute();
+$todoitems = $statement->fetchAll();
+$statement->closeCursor();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,62 +17,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo List</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+    <section class="top">
+    <header>
+        <h1>ToDo List</h1>
+    </header>
     <main>
-        <section class="list">
-        <header>
-            <h1>ToDo List</h1>
-        </header>
-        <?php if(!$title && !$newtitle) { ?>
-                <table>
-                    <tr>
-                        <td>Title <br> Description</td>
-                        <td><button class="tablebutton">Delete</button></td>
-                    </tr>
-                </table>
+        <?php if(!empty($todoitems)) { ?>
+            <?php foreach ($todoitems as $item) : ?>
+                <div class="items">
+                    <p class ="bold"><?php echo $item['Title']; ?></p>
+                    <p><?php echo $item['Description']; ?></p>
+                </div>
+                <div class="clear">
+                    <form action="delete_item.php" method="POST">
+                    <input type="hidden" name="item_num" value="<?php echo $item['ItemNum']; ?>">
+                    <button class="remove">X</button>
+                    </form>
+                </div>
+                <?php endforeach; ?>
+        <?php } else { ?>
+        <p>No to do list items exist yet.</p>
+        <?php } ?>
+    </section>
+
+        <section class="add_form">
+            <h2>Add Task</h2>
+            <form action="add_item.php" method="POST" id="add_item_form">
+                <input type="text" name="title" placeholder="Title" requiredd/><br>
+                <input tyep="text" name="description" placeholder="Description" required/>
+                <button class="add">Add Task</button>
+            </form>
         </section>
-
-            <section>
-                <h2>Add Item</h2>
-                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
-                <input type="text" id="newtitle" name="newtitle" placeholder="Title" required>
-                <input type="text" id="newdesccription" name="newdescription" placeholder="Description" required>
-                <button>Submit</button>
-            </section>
-            <?php } else { ?>
-                <?php require('database.php'); ?>
-
-                <?php 
-                    if ($newtitle) {
-                        $query = 'INSERT INTO todoitems
-                                        (Title, Description)
-                                    VALUES
-                                        (:newtitle, :newdescription)';
-                        $statement = $db->prepare($query);
-                        $statement->bindValue(':newtitle', $newtitle);
-                        $statement->bindValue(':newdescription', $newdescription);
-                        $statement->execute();
-                        $statement->closeCursor();
-                    }
-
-                    if ($title || $newtitle); {
-                    $query = 'SELECT * FROM todoitems
-                                WHERE Title = :title
-                                ORDER BY ItemNum';
-                        $statement = $db->prepare($query);
-                        if ($title) {
-                            $statement->bindValue(':title', $title);
-                        } else {
-                            $statement->bindValue(':city', $newtitle);
-                        }
-                        $statement->execute();
-                        $results = $statement->fetchAll();
-                        $statement->closeCursor();
-                    }
-                ?>
-            <?php } ?>
-    </main>
+    </main>    
 </body>
-</html>;
+</html>
